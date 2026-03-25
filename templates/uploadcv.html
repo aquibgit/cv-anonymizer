@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulk CV Upload & Anonymous Download</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .box { border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
+        button { padding: 8px 15px; margin-top: 10px; }
+        .file-list { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Upload Multiple CVs</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="cvs" multiple required>
+        <br>
+        <button type="submit">Upload & Anonymize</button>
+    </form>
+
+    {% if files %}
+    <div class="file-list">
+        <h3>Anonymous CVs:</h3>
+        <ul>
+            {% for file in files %}
+            <li>
+                <a href="{{ file.url }}" download>{{ file.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="cvs" multiple required>
+    <button type="submit">Upload & Update Excel</button>
+</form>
+
+{% if excel_file %}
+    <a href="{{ excel_file }}" download>Download Updated Excel</a>
+{% endif %}
+
+
+</body>
+</html>
